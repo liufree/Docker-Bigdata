@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  nginx:
+    build: .
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      - CLUSTER_NAME=test
+
