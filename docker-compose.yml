@@ -42,6 +42,19 @@ services:
       - ./mysql/mysql-init:/docker-entrypoint-initdb.d  #初始化目录，将初始化sql放入这里
     networks:
       - monitor
+  mysql-exporter:
+    image: prom/mysqld-exporter:latest
+    hostname: mysqlexporter     # grafana连接名是 mysql:3306,容器内互联互通
+    #skip-grant-tables 
+    restart: always 
+    ports:
+      - "9104:9104"  # 前面是本机接口，后面是docker接口
+    environment:
+      - "DATA_SOURCE_NAME=prom:prometheus@(mysql:3306)/"
+    depends_on:
+      - mysql
+    networks:
+      - monitor 
 
   postgres:
     image: postgres:latest
@@ -70,4 +83,30 @@ services:
       - ./grafana/conf/grafana.ini:/etc/grafana/grafana.ini # 配置文件，配置数据库
     networks:
       - monitor
+
+  alertmanager:
+    image: prom/alertmanager
+    hostname: alertmanager
+    restart: always
+    ports:
+      - "9093:9093"
+    networks:
+      - monitor
+
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/node_down.yml:/etc/prometheus/node_down.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - monitor
+    depends_on:
+      - mysql
+      - mysql-exporter
+      - alertmanager
+
 
