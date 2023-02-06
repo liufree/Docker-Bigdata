@@ -1,0 +1,109 @@
+################################################################################
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
+version: "3.8"
+
+networks:
+    redis:  # 网络名字
+        driver: host
+
+services:
+
+  redis-master:
+    image: redis:latest
+    hostname: redis1     # grafana连接名是 mysql:3306,容器内互联互通
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server
+    ports:
+      - 6379:6379
+      - 16379:16379
+    networks:
+      - redis
+      
+
+  redis-master1:
+    image: redis:latest
+    hostname: redis2     # grafana连接名是 mysql:3306,容器内互联互通
+    ports:
+      - 6371:6379
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server --requirepass redispass
+    networks:
+      - redis
+
+  redis-master2:
+    image: redis:latest
+    hostname: redis3     # grafana连接名是 mysql:3306,容器内互联互通
+    ports:
+      - 6372:6379
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server --requirepass redispass
+    networks:
+      - redis
+
+  redis-slave1:
+    image: redis:latest
+    hostname: redis4     # grafana连接名是 mysql:3306,容器内互联互通
+    ports:
+      - 6373:6379
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server --requirepass redispass
+    networks:
+      - redis
+
+  redis-slave2:
+    image: redis:latest
+    hostname: redis5     # grafana连接名是 mysql:3306,容器内互联互通
+    ports:
+      - 6374:6379
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server --requirepass redispass
+    networks:
+      - redis
+
+  redis-slave3:
+    image: redis:latest
+    hostname: redis6     # grafana连接名是 mysql:3306,容器内互联互通
+    ports:
+      - 6375:6379
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server --requirepass redispass
+    networks:
+      - redis
+
+  redis-cli: # 用于创建集群
+    image: redis:latest
+    hostname: redis_cli     # grafana连接名是 mysql:3306,容器内互联互通
+    volumes:
+      - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-cli --cluster create redis1:6379  redis2:6379  redis3:6379 redis4:6379 redis5:6379  redis6:6379  --cluster-replicas 3 -a redispass
+    networks:
+      - redis  
+    depends_on:
+      - redis-master
+      - redis-master1
+      - redis-master2
+      - redis-slave1
+      - redis-slave2
+      - redis-slave3
