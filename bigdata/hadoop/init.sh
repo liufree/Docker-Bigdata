@@ -8,11 +8,13 @@ wait_for() {
 /usr/sbin/sshd -D &
 sleep 2
 
+source /etc/profile
 ## 进入到namenode节点,su -不改变环境变量
 su -
 # ## 使用su环境变量会失效
 source /etc/profile
 
+sleep 2
 # ssh namenode 
 # sleep 2
 
@@ -30,10 +32,12 @@ sbin/start-all.sh
 wait_for namenode 9870 "hadoop-hdfs"
 
 # hive
-bin/hadoop fs -mkdir       /tmp   
-bin/hadoop fs -mkdir  -p  /user/hive/warehouse  
-bin/hadoop fs -chmod g+w   /tmp   
-bin/hadoop fs -chmod g+w   /user/hive/warehouse
+bin/hadoop fs -mkdir  -p   /user/hive/tmp   
+bin/hadoop fs -mkdir  -p   /user/hive/warehouse  
+bin/hadoop fs -mkdir  -p   /user/hive/log
+bin/hadoop fs -chmod 777   /user/hive/tmp   
+bin/hadoop fs -chmod 777   /user/hive/warehouse
+bin/hadoop fs -chmod 777   /user/hive/log
 
 cd /opt/hive
 # 初始化

@@ -85,14 +85,16 @@ services:
     networks:
       - monitor
 
-  presto:
+  trino:
     # container_name: 指定containerName，一般不需要指定，想启动多个实例不需要指定
-    image: liufree/presto:latest
-    hostname: presto     # grafana连接名是 mysql:3306,容器内互联互通
+    image: liufree/trino:latest
+    hostname: trino     # grafana连接名是 mysql:3306,容器内互联互通
     restart: always
     ports:
       - "8080:8080"  # 前面是本机接口，后面是docker接口
     networks:
       - monitor
+    depends_on:
+      - hive
 
 

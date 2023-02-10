@@ -45,8 +45,9 @@
 
 
 # Set HADOOP_HOME to point to a specific hadoop install directory
-HADOOP_HOME=${HADOOP_HOME}
-
+export HADOOP_HOME=/opt/hadoop
+export HIVE_HOME=/opt/hive
+export HIVE_CONF_DIR=/opt/hive/conf
 # Hive Configuration Directory can be controlled by:
 # export HIVE_CONF_DIR=
 
