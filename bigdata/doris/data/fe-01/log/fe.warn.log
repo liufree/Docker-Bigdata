@@ -1,0 +1,28 @@
+2023-03-06 16:09:24,923 ERROR (main|1) [BDBEnvironment.setup():201] error to open replicated environment. will exit.
+com.sleepycat.je.EnvironmentFailureException: (JE 18.3.12) 172.20.80.2_9010_1678118954033(-1):/opt/apache-doris/fe/doris-meta/bdb Can not register /opt/apache-doris/fe/doris-meta/bdb or its sub-directories to WatchService. UNEXPECTED_EXCEPTION: Unexpected internal Exception, may have side effects. Environment is invalid and must be closed.
+	at com.sleepycat.je.log.FileDeletionDetector.<init>(FileDeletionDetector.java:145) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.log.FileManager.<init>(FileManager.java:456) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.dbi.EnvironmentImpl.<init>(EnvironmentImpl.java:646) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.rep.impl.RepImpl.<init>(RepImpl.java:328) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:1.8.0_342]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:1.8.0_342]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:1.8.0_342]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423) ~[?:1.8.0_342]
+	at com.sleepycat.je.dbi.DbEnvPool.loadRepImpl(DbEnvPool.java:261) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.dbi.DbEnvPool.getEnvironment(DbEnvPool.java:195) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.Environment.makeEnvironmentImpl(Environment.java:278) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.Environment.<init>(Environment.java:258) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.rep.ReplicatedEnvironment.<init>(ReplicatedEnvironment.java:605) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.rep.ReplicatedEnvironment.<init>(ReplicatedEnvironment.java:464) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at com.sleepycat.je.rep.ReplicatedEnvironment.<init>(ReplicatedEnvironment.java:538) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	at org.apache.doris.journal.bdbje.BDBEnvironment.setup(BDBEnvironment.java:154) ~[doris-fe.jar:1.0-SNAPSHOT]
+	at org.apache.doris.journal.bdbje.BDBJEJournal.open(BDBJEJournal.java:303) ~[doris-fe.jar:1.0-SNAPSHOT]
+	at org.apache.doris.persist.EditLog.open(EditLog.java:1003) ~[doris-fe.jar:1.0-SNAPSHOT]
+	at org.apache.doris.catalog.Env.initialize(Env.java:858) ~[doris-fe.jar:1.0-SNAPSHOT]
+	at org.apache.doris.PaloFe.start(PaloFe.java:138) ~[doris-fe.jar:1.0-SNAPSHOT]
+	at org.apache.doris.PaloFe.main(PaloFe.java:73) ~[doris-fe.jar:1.0-SNAPSHOT]
+Caused by: java.io.IOException: Function not implemented
+	at sun.nio.fs.LinuxWatchService.<init>(LinuxWatchService.java:64) ~[?:1.8.0_342]
+	at sun.nio.fs.LinuxFileSystem.newWatchService(LinuxFileSystem.java:47) ~[?:1.8.0_342]
+	at com.sleepycat.je.log.FileDeletionDetector.<init>(FileDeletionDetector.java:85) ~[je-18.3.13-doris-SNAPSHOT.jar:18.3.13-doris-SNAPSHOT]
+	... 20 more
